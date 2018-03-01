@@ -17,18 +17,17 @@
 <body>
 	<div class="main_div">
 		<form id="form_add" class="layui-form layui-form-pane" action="" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="id" value="${product.id}" />
 			<div class="layui-form-item">
 				<label class="layui-form-label">商品名称</label>
 				<div class="layui-input-block">
-					<input type="text" name="name" value="${product.name}" autocomplete="off"
+					<input type="text" name="name" autocomplete="off"
 						placeholder="请输入商品名称" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">商品副标题</label>
 				<div class="layui-input-block">
-					<input type="text" name="subtitle" value="${product.subtitle}" lay-verify="required"
+					<input type="text" name="subtitle" lay-verify="required"
 						placeholder="请输入商品副标题" autocomplete="off" class="layui-input">
 				</div>
 			</div>
@@ -48,35 +47,29 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">商品价格</label>
 				<div class="layui-input-block">
-					<input type="text" name="price" value="${product.price}" autocomplete="off"
+					<input type="text" name="price" autocomplete="off"
 						placeholder="请输入商品价格" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">商品库存</label>
 				<div class="layui-input-block">
-					<input type="text" name="stock" value="${product.stock}" autocomplete="off"
+					<input type="text" name="stock" autocomplete="off"
 						placeholder="请输入商品库存" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item" pane="">
 				<label class="layui-form-label">商品状态</label>
 				<div class="layui-input-block">
-					<c:if test="${product.status==1}">
-						<input type="radio" name="status" value="1" title="上架" checked="">
-						<input type="radio" name="status" value="2" title="下架">
-					</c:if>
-					<c:if test="${product.status==2}">
-						<input type="radio" name="status" value="1" title="上架" >
-						<input type="radio" name="status" value="2" title="下架" checked="">
-					</c:if>
+					<input type="radio" name="status" value="1" title="上架" checked="">
+					<input type="radio" name="status" value="2" title="下架">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">商品主图</label>
 				<div class="layui-input-block">
-					<input type="hidden" id="mainImage" name="mainImage" value="${product.mainImage}"/>
-					<img alt="" src="/pic/${product.mainImage}" id="imgId" width="100" height="100"/><br/>
+					<input type="hidden" id="mainImage" name="mainImage" />
+					<img alt="" src="" id="imgId" width="100" height="100"/><br/>
 					<input type="file" id="inputFile" name="pictureFile" onchange="uploadPic()"/>
 				</div>
 			</div>
@@ -84,25 +77,18 @@
 				<label class="layui-form-label">商品图片</label>
 				<div class="layui-input-block">
 					<a href="javascript:void(0)" id="multiPicUpload" class="multiPicUpload">上传图片</a>
-					<input type="hidden" id="subImages" name="subImages" value="${product.subImages}"/>
-					<div id="subImagesDiv">
-						<c:set var="subImages" value="${fn:split(product.subImages, ',')}" />
-						<c:forEach items="${subImages}" var="subImage">
-							<img src="/pic/${subImage}" width="80" height="50">
-						</c:forEach>
-					</div>
+					<input type="hidden" id="subImages" name="subImages" />
+					<div id="subImagesDiv"></div>
 				</div>
 			</div>
 			<div class="layui-form-item layui-form-text">
 				<label class="layui-form-label">文本域</label>
 				<div class="layui-input-block">
-					<textarea placeholder="请输入内容" class="layui-textarea" name="detail">
-						${product.detail}
-					</textarea>
+					<textarea placeholder="请输入内容" class="layui-textarea" name="detail"></textarea>
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<button type="button" class="layui-btn" onclick="submitForm()">修改</button>
+				<button type="button" class="layui-btn" onclick="submitForm()">添加</button>
 			</div>
 		</form>
 	</div>
@@ -117,7 +103,7 @@
 				console.log(data.value); //得到被选中的值
 				console.log(data.othis); //得到美化后的DOM对象
 				$.ajax({
-					url : '${ctx}/manager/category/selectSecondCategory.action',
+					url : '${ctx}/category/selectSecondCategory.action',
 					data : 'topCategoryId=' + data.value,
 					dataType : 'json',
 					type : 'POST',
@@ -142,7 +128,7 @@
 		$(function() {
 			//加载一级分类
 			$.ajax({
-				url : '${ctx}/manager/category/selectTopCategory.action',
+				url : '${ctx}/category/selectTopCategory.action',
 				type : "POST",
 				dataType : "json",
 				success : function(jsonObj) {
@@ -151,44 +137,13 @@
 						var html = '<option value="">请选一级分类</option>';
 						var data = jsonObj.data;
 						for (var i = 0; i < data.length; i++) {
-							if("${parentCategoryId}" == data[i].id){
-								html += '<option selected value="'+data[i].id+'">'
-								+ data[i].name + '</option>';
-							} else {
-								html += '<option value="'+data[i].id+'">'
-								+ data[i].name + '</option>';
-							}
+							html += '<option value="'+data[i].id+'">'
+									+ data[i].name + '</option>';
+							;
 						}
 						$('#topCategory').html(html);
 					} else {
 
-					}
-				}
-			});
-			
-			//加载二级分类
-			$.ajax({
-				url : '${ctx}/manager/category/selectSecondCategory.action',
-				data : 'topCategoryId=${parentCategoryId}',
-				dataType : 'json',
-				type : 'POST',
-				success : function(jsonObj) {
-					if (jsonObj.code == util.SUCCESS) {
-						var html = '<option value="">请选二级分类</option>';
-						var data = jsonObj.data;
-						for (var i = 0; i < data.length; i++) {
-							if("${product.categoryId}" == data[i].id){
-								html += '<option selected value="'+data[i].id+'">'
-								+ data[i].name + '</option>';
-							} else {
-								html += '<option value="'+data[i].id+'">'
-								+ data[i].name + '</option>';
-							}
-						}
-						$('#secondCategory').html(html);
-						form.render('select'); //刷新select选择框渲染,不然不显示
-					} else {
-						mylayer.errorMsg(jsonObj.msg);
 					}
 				}
 			});
@@ -203,7 +158,7 @@
 			}
 			
 			$('#form_add').ajaxSubmit({
-				url : '${ctx}/manager/upload/uploadPic.action',
+				url : '${ctx}/upload/uploadPic.action',
 				type : 'POST',
 				dataType : 'json',
 				success : function(jsonObj) {
@@ -216,20 +171,14 @@
 		
 		function submitForm(){
 			$.ajax({
-				url : '${ctx}/manager/product/update.action',
+				url : '${ctx}/product/add.action',
 				data : $('#form_add').serialize(),
 				type : 'POST',
 				dataType : 'json',
 				success : function(jsonObj) {
 					if(jsonObj.code == util.SUCCESS) {
-						mylayer.success(jsonObj.msg);
-						//当你在iframe页面关闭自身时
-						var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-						setTimeout(function(){
-						     parent.layer.close(index); //再执行关闭
-						     window.parent.location.reload();//刷新父页面
-						},1500);
-
+						//mylayer.success(jsonObj.msg);
+						mylayer.confirm("添加成功，是够跳转到商品列表界面？", "${ctx}/product/getProductPage.action");
 					} else {
 						mylayer.errorMsg(jsonObj.msg);
 					}
@@ -244,7 +193,7 @@
                  //指定上传文件参数名称
                  filePostName  : "pictureFile",
                  //指定上传文件请求的url。
-                 uploadJson : '${ctx}/manager/upload/multiPicUpload.action',
+                 uploadJson : '${ctx}/upload/multiPicUpload.action',
                  //上传类型，分别为image、flash、media、file
                  dir : "image",
                  afterBlur: function () { this.sync(); }

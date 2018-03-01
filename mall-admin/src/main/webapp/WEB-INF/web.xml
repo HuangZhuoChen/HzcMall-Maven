@@ -38,33 +38,18 @@
   
     <!-- 配置SpringMVC 后台 -->
     <servlet>
-        <servlet-name>springmvc-back</servlet-name>
+        <servlet-name>springmvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
        <init-param>
            <param-name>contextConfigLocation</param-name>
-           <param-value>classpath:springmvc-back.xml</param-value>
+           <param-value>classpath:springmvc.xml</param-value>
        </init-param>
        <!-- 启动tomcat时候启动 -->
        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>springmvc-back</servlet-name>
+        <servlet-name>springmvc</servlet-name>
        <url-pattern>*.action</url-pattern>
     </servlet-mapping>
  
-  	<!-- 配置SpringMVC 前台 -->
-    <servlet>
-        <servlet-name>springmvc-front</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-       <init-param>
-           <param-name>contextConfigLocation</param-name>
-           <param-value>classpath:springmvc-front.xml</param-value>
-       </init-param>
-       <!-- 启动tomcat时候启动 -->
-       <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>springmvc-front</servlet-name>
-       <url-pattern>*.shtml</url-pattern>
-    </servlet-mapping>
 </web-app>

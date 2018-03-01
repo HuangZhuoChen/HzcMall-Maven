@@ -12,7 +12,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     
 	<!-- 配置Controller扫描 -->
-    <context:component-scan base-package="com.situ.mall.controller" />
+    <context:component-scan base-package="com.situ.mall.admin.controller" />
     <!-- 配置注解驱动 -->
     <mvc:annotation-driven />
     
@@ -35,7 +35,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     <!-- jsp配置视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
        <!-- 前缀 -->
-       <property name="prefix" value="/WEB-INF/back/" />
+       <property name="prefix" value="/WEB-INF/jsp/" />
        <!-- 后缀 -->
        <property name="suffix" value=".jsp" />
     </bean>

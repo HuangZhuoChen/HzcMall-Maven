@@ -4,8 +4,8 @@
 <configuration>
     <!-- 别名 -->
     <typeAliases>
-       <package name="com.situ.mall.entity"/>
-       <package name="com.situ.mall.vo"/>
+       <package name="com.situ.mall.core.entity"/>
+       <package name="com.situ.mall.admin.vo"/>
     </typeAliases>
     
     <plugins>

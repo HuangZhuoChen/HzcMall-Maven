@@ -55,7 +55,7 @@
 		  
 		  table.render({
 		    elem: '#datagrid', //要渲染哪个表格
-		    url:'${ctx}/manager/product/pageList.action', //异步数据接口
+		    url:'${ctx}/product/pageList.action', //异步数据接口
 		    cellMinWidth: 50, //列宽自动分配，全局定义常规单元格的最小宽度
 		    cols: [[
 			  {type:'checkbox'},
@@ -98,7 +98,7 @@
 		    	layer.confirm('确定要删除这' + data.length + '条数据吗？', function(index){
 			    	var ids = util.getSelectedIds(data);
 			    	$.ajax({
-			    		url : '${ctx}/manager/product/deleteAll.action',
+			    		url : '${ctx}/product/deleteAll.action',
 			    		data : {'ids' : ids},
 			    		dataType : 'json',
 			    		success : function(jsonData) {
@@ -113,7 +113,7 @@
 	    		});
 		    },
 		    add : function() {
-		    	location.href = "${ctx}/manager/product/getAddPage.action";
+		    	location.href = "${ctx}/product/getAddPage.action";
 		    }
 		  };
 		  
@@ -128,7 +128,7 @@
 		    } else if(layEvent === 'del'){ //删除
 		    	layer.confirm('真的删除行么', function(index){
 		       		$.ajax({
-		       			url : '${ctx}/manager/product/deleteById.action',
+		       			url : '${ctx}/product/deleteById.action',
 		       			data : {'id' : data.id},
 		       			dataType : 'json',
 		       			success : function(jsonData) {
@@ -149,7 +149,7 @@
 		    		title : '商品编辑',
 		    		area : ['1000px', '650px'],
 		    		offset : '10px', //只定义top坐标，水平保持居中
-		    		content : '${ctx}/manager/product/getEditPage.action?id=' + data.id
+		    		content : '${ctx}/product/getEditPage.action?id=' + data.id
 		    	});
 		    }
 		  });

@@ -1,4 +1,4 @@
-package com.situ.mall.admin.constant;
+package com.situ.mall.core.constant;
 
 public class Const {
 	//user表里面的两个角色

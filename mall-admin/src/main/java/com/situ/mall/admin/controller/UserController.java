@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.situ.mall.admin.constant.Const;
 import com.situ.mall.common.response.ServerResponse;
+import com.situ.mall.core.constant.Const;
 import com.situ.mall.core.entity.User;
 import com.situ.mall.core.service.IUserService;
 
 @Controller
-@RequestMapping("/manager/user")
+@RequestMapping("/user")
 public class UserController {
 	@Autowired
 	private IUserService userService;

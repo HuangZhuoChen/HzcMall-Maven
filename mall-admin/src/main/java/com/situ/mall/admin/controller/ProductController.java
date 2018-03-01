@@ -12,7 +12,7 @@ import com.situ.mall.core.service.ICategoryService;
 import com.situ.mall.core.service.IProductService;
 
 @Controller
-@RequestMapping("/manager/product")
+@RequestMapping("/product")
 public class ProductController {
 	@Autowired
 	private IProductService productService;
