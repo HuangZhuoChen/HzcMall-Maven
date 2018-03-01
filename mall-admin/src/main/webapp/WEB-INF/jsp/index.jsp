@@ -457,7 +457,6 @@
     <script src="${ctx}/static/back/js/bootstrap.min.js?v=3.3.6"></script>
     <script src="${ctx}/static/back/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="${ctx}/static/back/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="${ctx}/static/back/js/plugins/layer/layer.min.js"></script>
 
     <!-- 自定义js -->
     <script src="${ctx}/static/back/js/hAdmin.js?v=4.1.0"></script>
