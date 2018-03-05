@@ -38,5 +38,15 @@ public class CategoryServiceImpl implements ICategoryService{
 	public Integer selectParentCategoryId(Integer categoryId) {
 		return categoryMapper.selectParentCategoryId(categoryId);
 	}
+
+	@Override
+	public List<Category> selectTopCategoryList() {
+		return categoryMapper.selectTopCategory();
+	}
+
+	@Override
+	public List<Category> selectSecondCategoryList() {
+		return categoryMapper.selectSecondCategoryList();
+	}
 		
 }

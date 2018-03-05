@@ -137,12 +137,11 @@
   </select>
   
   
-  
-  
-  
-  
-  
-  
-  
+  <select id="selectSecondCategoryList"  resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from category
+    where parent_id!=0
+  </select>
   
 </mapper>
