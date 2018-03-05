@@ -18,6 +18,10 @@
 	  <div class="layui-inline">
 	    <input class="layui-input" name="id" id="searchEmail" autocomplete="off">
 	  </div>
+	  电话：
+	  <div class="layui-inline">
+	    <input class="layui-input" name="id" id="searchPhone" autocomplete="off">
+	  </div>
 	  <button class="layui-btn" data-type="search">搜索</button>
 	  <button class="layui-btn layui-btn-danger" data-type="deleteAll">批量删除</button>
 	</div>
@@ -62,6 +66,7 @@
 	    	  	where: { //设定异步数据接口的额外参数，任意设
 	    		    username : $('#searchUsername').val(),
 	    		    email : $('#searchEmail').val(),
+	    		    phone : $('#searchPhone').val(),
 	    		},
 	    		page: {
 	    		   curr: 1 //重新从第 1 页开始
