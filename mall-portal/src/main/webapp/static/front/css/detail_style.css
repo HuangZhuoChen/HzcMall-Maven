@@ -593,6 +593,7 @@ input {
 	width: 20px;
 	height: 26px;
 	float: left;
+	clear: left;
 	border: 1px solid #CCCCCC;
 }
 
@@ -600,7 +601,6 @@ input {
 	width: 20px;
 	height: 26px;
 	float: left;
-	clear: left;
 	border: 1px solid #CCCCCC;
 }
 
@@ -898,16 +898,16 @@ input {
 }
 .right_big{
 	width: 905px;
-	float: right;
+	float: left;
 }
 .right_big .big_img{
-	float: right;
+	float: left;
 	margin-top: 40px;
 	margin-right: 174px;
 }
 .right_big_bottom{
-	float: right;
-	clear: right;
+	float: left;
+	clear: left;
 	margin-left: 24px;
 	height: 430px;
 	margin-top: 35px;
