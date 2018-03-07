@@ -40,6 +40,7 @@ public class CartVo {
 		}
 		//在原来的购物车中就没有这件商品，直接添加
 		if (isExist == false) {
+			cartItemVo.getProduct().setStock(null);
 			cartItemVos.add(cartItemVo);
 		}
 	}

@@ -11,7 +11,7 @@ var mylayer = {
 	successUrl : function(contents, url) {
 		layer.msg(
 			contents,
-			{icon:1, time:3000},
+			{icon:1, time:500},
 			function() {
 				location.href = url;
 			}

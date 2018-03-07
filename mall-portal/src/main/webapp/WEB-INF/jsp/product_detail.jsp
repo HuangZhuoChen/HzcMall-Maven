@@ -929,20 +929,22 @@
 		});
 		
 		function addCart() {
-			$.ajax({
+			window.location.href="${ctx}/cart/addCart.shtml?productId=${product.id}&amount="+$("#amount").val();
+			/* $.ajax({
 				url : '${ctx}/cart/addCart.shtml',
 				data : {'productId' : '${product.id}', 'amount' : $("#amount").val()},
 				type : 'POST',
 				dataType : 'json',
 				success : function(jsonObj) {
 					if(jsonObj.code == util.SUCCESS) {
-						layer.msg('dyhfidhfio');
+						//alert(jsonObj.msg);
+						//window.location.href = '${ctx}/cart/getCartPage.shtml';
 						mylayer.successUrl(jsonObj.msg, '${ctx}/cart/getCartPage.shtml');
 					} else {
 						mylayer.errorMsg(jsonObj.msg);
 					}
 				}
-			});
+			}); */
 		}
 		
 	</script>

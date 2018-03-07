@@ -36,31 +36,7 @@ public class CartController {
 
 	@RequestMapping("/getCartPage")
 	public String getCartPage(HttpServletRequest request, Model model) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		// 只有对象中不为null才转换
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		CartVo cartVo = null;
-		// 将客户端中购物车cookie拿出来
-		// springmvc
-		Cookie[] cookies = request.getCookies();
-		if (null != cookies && cookies.length != 0) {
-			for (Cookie cookie : cookies) {
-				if (CART_COOKIE.equals(cookie.getName())) {// 找到了客户端cookie中购物车信息
-					String value = cookie.getValue();
-					try {
-						// 将json字符串转换为对象
-						cartVo = objectMapper.readValue(value, CartVo.class);
-					} catch (JsonParseException e) {
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
+		CartVo cartVo = getCartVoFromCookie(request);
 		// 2、将cookie里面所有的商品查询出来，转换成Cart这个对象
 		if (cartVo != null) {
 			List<CartItemVo> cartItemVos = cartVo.getCartItemVos();
@@ -74,38 +50,17 @@ public class CartController {
 		return "cart";
 	}
 
+
 	@RequestMapping("/addCart")
-	@ResponseBody
-	public ServerResponse addCart(Integer productId, Integer amount, HttpServletRequest request,
+//	public ServerResponse addCart(Integer productId, Integer amount, HttpServletRequest request,
+//			HttpServletResponse response, Model model) {
+	public String addCart(Integer productId, Integer amount, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
 		System.out.println("productId: " + productId);
 		System.out.println("amount: " + amount);
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		// 只有对象中不为null才转换
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		CartVo cartVo = null;
-		// 将客户端中购物车cookie拿出来
-		// springmvc
-		Cookie[] cookies = request.getCookies();
-		if (null != cookies && cookies.length != 0) {
-			for (Cookie cookie : cookies) {
-				if (CART_COOKIE.equals(cookie.getName())) {// 找到了客户端cookie中购物车信息
-					String value = cookie.getValue();
-					try {
-						// 将json字符串转换为对象
-						cartVo = objectMapper.readValue(value, CartVo.class);
-					} catch (JsonParseException e) {
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
+		CartVo cartVo = getCartVoFromCookie(request);
+		//原来cookie中没有购物车，所以转换为的CartVo是null。
 		if (cartVo == null) {
 			cartVo = new CartVo();
 		}
@@ -121,28 +76,73 @@ public class CartController {
 			cartItemVo.setAmount(amount);
 			cartVo.addItem(cartItemVo);
 
-			// 将cartVo对象以json形式放到cookie
-			StringWriter stringWriter = new StringWriter();
-			try {
-				objectMapper.writeValue(stringWriter, cartVo);
-			} catch (JsonGenerationException e) {
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			setCartVoToCookie(response, cartVo);
+		}
+		
+		return "redirect:/cart/getCartPage.shtml";
+		//return ServerResponse.createSuccess("添加购物车成功");
+	}
+	
+	/**
+	 * 将Cookie中的购物车信息转换为CartVo对象
+	 * @param request
+	 * @return
+	 */
+	private CartVo getCartVoFromCookie(HttpServletRequest request) {
+		CartVo cartVo = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+		// 只有对象中不为null才转换
+		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		// 将客户端中购物车cookie拿出来
+		Cookie[] cookies = request.getCookies();
+		if (null != cookies && cookies.length != 0) {
+			for (Cookie cookie : cookies) {
+				if (CART_COOKIE.equals(cookie.getName())) {// 找到了客户端cookie中购物车信息
+					String value = cookie.getValue();
+					try {
+						// 将json字符串转换为对象
+						cartVo = objectMapper.readValue(value, CartVo.class);
+					} catch (JsonParseException e) {
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
+		}
+		return cartVo;
+	}
 
-			// 将购物车json放到cookie
-			Cookie cookie = new Cookie(CART_COOKIE, stringWriter.toString());
-			// 设置cookie的存储时间
-			cookie.setMaxAge(60 * 60 * 24);// 单位秒
-			// 设置cookie路径
-			cookie.setPath("/");
-			// 将cookie发送到浏览器
-			response.addCookie(cookie);
+	/**
+	 * 将CartVo对象设置到Cookie中
+	 * @param response
+	 * @param cartVo
+	 */
+	private void setCartVoToCookie(HttpServletResponse response, CartVo cartVo) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		// 只有对象中不为null才转换
+		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		// 将cartVo对象以json形式放到cookie
+		StringWriter stringWriter = new StringWriter();
+		try {
+			objectMapper.writeValue(stringWriter, cartVo);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		return ServerResponse.createSuccess("添加购物车成功");
+		// 将购物车json放到cookie
+		Cookie cookie = new Cookie(CART_COOKIE, stringWriter.toString());
+		// 设置cookie的存储时间
+		cookie.setMaxAge(60 * 60 * 24);// 单位秒
+		// 设置cookie路径
+		cookie.setPath("/");
+		// 将cookie发送到浏览器
+		response.addCookie(cookie);
 	}
 }
