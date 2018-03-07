@@ -8,6 +8,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.util.HSSFColor.BLACK;
+import org.omg.CORBA.TRANSACTION_REQUIRED;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,25 +52,49 @@ public class CartController {
 		return "cart";
 	}
 
-
 	@RequestMapping("/addCart")
 	@ResponseBody
 	public ServerResponse addCart(Integer productId, Integer amount, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
-	//public String addCart(Integer productId, Integer amount, HttpServletRequest request,
-	//		HttpServletResponse response, Model model) {
-		System.out.println("productId: " + productId);
-		System.out.println("amount: " + amount);
-
+		// 讲Cookie里面的购物车转换为CartVo对象
 		CartVo cartVo = getCartVoFromCookie(request);
-		//原来cookie中没有购物车，所以转换为的CartVo是null。
+		// 原来cookie中没有购物车，所以转换为的CartVo是null。
 		if (cartVo == null) {
 			cartVo = new CartVo();
 		}
 
-		if (null != productId) {
-			Product productTemp = productService.selectById(productId);
-			
+		boolean result = addOrUpdateCarVo(productId, amount, cartVo);
+		if (result == false) {
+			return ServerResponse.createError("添加购物车失败");
+		}
+		
+		setCartVoToCookie(response, cartVo);
+		return ServerResponse.createSuccess("添加购物车成功");
+	}
+
+	private boolean addOrUpdateCarVo(Integer productId, Integer amount, CartVo cartVo) {
+		Product productTemp = productService.selectById(productId);
+		boolean isExist = false;
+		// 1、将要加入购物车的商品productId和amount插入cookie
+		// 1.2 这个商品cookie里面没有，创建然后插入
+		List<CartItemVo> cartItemVos = cartVo.getCartItemVos();
+		for (CartItemVo item : cartItemVos) {
+			// 1.1 这个商品cookie里面已经有了，根据productId找到这件商品，更新数量即可
+			if (item.getProduct().getId().intValue() == productId.intValue()) {
+				isExist = true;
+				//这个商品新的数量=原来购物车中这个商品数量+新添加这个商品的数量
+				int newAmount = item.getAmount() + amount;
+				//判断商品数量有没有超过库存
+				if (newAmount > productTemp.getStock()) {
+					//超过库存
+					return false;
+				} 
+				item.setAmount(newAmount);
+				return true;//更新完这个商品数量后，后面的就不需要遍历
+			}
+		}
+		//在原来的购物车中就没有这件商品，直接添加
+		if (isExist == false) {
 			CartItemVo cartItemVo = new CartItemVo();
 			Product product = new Product();
 			product.setId(productId);
@@ -76,19 +102,12 @@ public class CartController {
 			cartItemVo.setIsChecked(Const.CartChecked.CHECKED);
 			cartItemVo.setAmount(amount);
 			
-			if (cartVo.addItem(cartItemVo, productTemp.getStock())) {
-				//将CartVo对象设置到Cookie
-				setCartVoToCookie(response, cartVo);
-				return ServerResponse.createSuccess("添加购物车成功");
-			} else {
-				return ServerResponse.createError("加入购物车失败，超出库存");
-			}
+			cartItemVos.add(cartItemVo);
+			return true;
 		}
-		
-		//return "redirect:/cart/getCartPage.shtml";
-		return ServerResponse.createError("添加购物车失败");
+		return false;
 	}
-	
+
 	/**
 	 * 将Cookie中的购物车信息转换为CartVo对象
 	 * @param request
