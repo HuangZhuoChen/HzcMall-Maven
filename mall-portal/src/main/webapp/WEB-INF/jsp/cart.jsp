@@ -341,5 +341,10 @@
 			京公网安备 110101020011226|京ICP证111033号|食品流通许可证 SP1101051110165515（1-1）|营业执照
 		</div>
 	</body>
+	<script type="text/javascript">
+		layui.use(['layer'], function(){
+		  var layer = layui.layer;
+		});
+	</script>
 
 </html>

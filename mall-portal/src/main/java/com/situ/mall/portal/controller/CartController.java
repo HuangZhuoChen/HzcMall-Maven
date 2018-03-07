@@ -52,10 +52,11 @@ public class CartController {
 
 
 	@RequestMapping("/addCart")
-//	public ServerResponse addCart(Integer productId, Integer amount, HttpServletRequest request,
-//			HttpServletResponse response, Model model) {
-	public String addCart(Integer productId, Integer amount, HttpServletRequest request,
+	@ResponseBody
+	public ServerResponse addCart(Integer productId, Integer amount, HttpServletRequest request,
 			HttpServletResponse response, Model model) {
+	//public String addCart(Integer productId, Integer amount, HttpServletRequest request,
+	//		HttpServletResponse response, Model model) {
 		System.out.println("productId: " + productId);
 		System.out.println("amount: " + amount);
 
@@ -66,21 +67,26 @@ public class CartController {
 		}
 
 		if (null != productId) {
-			CartItemVo cartItemVo = new CartItemVo();
 			Product productTemp = productService.selectById(productId);
+			
+			CartItemVo cartItemVo = new CartItemVo();
 			Product product = new Product();
 			product.setId(productId);
-			product.setStock(productTemp.getStock());
 			cartItemVo.setProduct(product);
-			cartItemVo.setIsChecked(Const.CartChecked.UNCHECKED);
+			cartItemVo.setIsChecked(Const.CartChecked.CHECKED);
 			cartItemVo.setAmount(amount);
-			cartVo.addItem(cartItemVo);
-
-			setCartVoToCookie(response, cartVo);
+			
+			if (cartVo.addItem(cartItemVo, productTemp.getStock())) {
+				//将CartVo对象设置到Cookie
+				setCartVoToCookie(response, cartVo);
+				return ServerResponse.createSuccess("添加购物车成功");
+			} else {
+				return ServerResponse.createError("加入购物车失败，超出库存");
+			}
 		}
 		
-		return "redirect:/cart/getCartPage.shtml";
-		//return ServerResponse.createSuccess("添加购物车成功");
+		//return "redirect:/cart/getCartPage.shtml";
+		return ServerResponse.createError("添加购物车失败");
 	}
 	
 	/**

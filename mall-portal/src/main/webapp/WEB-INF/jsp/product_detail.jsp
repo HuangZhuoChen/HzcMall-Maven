@@ -8,7 +8,6 @@
 		<meta charset="UTF-8">
 		<title>华为畅享6S</title>
 		<link rel="stylesheet" type="text/css" href="${ctx}/static/front/css/detail_style.css" />
-		<link rel="stylesheet" type="text/css" href="${ctx}/static/front/css/detail_style.css" />
 	</head>
 
 	<body>
@@ -929,8 +928,8 @@
 		});
 		
 		function addCart() {
-			window.location.href="${ctx}/cart/addCart.shtml?productId=${product.id}&amount="+$("#amount").val();
-			/* $.ajax({
+			//window.location.href="${ctx}/cart/addCart.shtml?productId=${product.id}&amount="+$("#amount").val();
+			$.ajax({
 				url : '${ctx}/cart/addCart.shtml',
 				data : {'productId' : '${product.id}', 'amount' : $("#amount").val()},
 				type : 'POST',
@@ -944,7 +943,7 @@
 						mylayer.errorMsg(jsonObj.msg);
 					}
 				}
-			}); */
+			});
 		}
 		
 	</script>

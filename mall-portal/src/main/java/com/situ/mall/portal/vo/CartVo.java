@@ -17,7 +17,7 @@ public class CartVo {
 		this.cartItemVos = cartItemVos;
 	}
 
-	public void addItem(CartItemVo cartItemVo) {
+	public boolean addItem(CartItemVo cartItemVo, Integer stock) {
 		boolean isExist = false;
 		// 1、将要加入购物车的商品productId和amount插入cookie
 		// 1.2 这个商品cookie里面没有，创建然后插入
@@ -28,21 +28,22 @@ public class CartVo {
 				//这个商品新的数量=原来购物车中这个商品数量+新添加这个商品的数量
 				int amount = item.getAmount() + cartItemVo.getAmount();
 				//判断商品数量有没有超过库存
-				if (amount <= cartItemVo.getProduct().getStock()) {
+				if (amount <= stock) {
 					//没有超过库存将这个产品数量跟新到购物车里面
 					item.setAmount(amount);
+					return true;
 				} else {
-					//如果数量超过库存数量则将最大库存
-					item.setAmount(cartItemVo.getProduct().getStock());
+					return false;
 				}
-				return;
 			}
 		}
 		//在原来的购物车中就没有这件商品，直接添加
 		if (isExist == false) {
-			cartItemVo.getProduct().setStock(null);
 			cartItemVos.add(cartItemVo);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	public static void main(String[] args) {
