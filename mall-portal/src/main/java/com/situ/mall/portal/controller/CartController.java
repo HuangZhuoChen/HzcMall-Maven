@@ -71,6 +71,26 @@ public class CartController {
 		setCartVoToCookie(response, cartVo);
 		return ServerResponse.createSuccess("添加购物车成功");
 	}
+	
+	@RequestMapping("/updateCart")
+	@ResponseBody
+	public ServerResponse updateCart(Integer productId, Integer amount, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		// 讲Cookie里面的购物车转换为CartVo对象
+		CartVo cartVo = getCartVoFromCookie(request);
+		// 原来cookie中没有购物车，所以转换为的CartVo是null。
+		if (cartVo == null) {
+			cartVo = new CartVo();
+		}
+
+		boolean result = addOrUpdateCarVo(productId, amount, cartVo);
+		if (result == false) {
+			return ServerResponse.createError("添加购物车失败");
+		}
+		
+		setCartVoToCookie(response, cartVo);
+		return ServerResponse.createSuccess("添加购物车成功");
+	}
 
 	private boolean addOrUpdateCarVo(Integer productId, Integer amount, CartVo cartVo) {
 		Product productTemp = productService.selectById(productId);

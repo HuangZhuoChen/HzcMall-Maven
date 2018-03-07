@@ -125,18 +125,18 @@
 									¥ 1699.00<br />
 								</del>
 							</span>
-							<span style="color: #666666;">
+							<span style="color: #666666;" id="price${cartItemVo.product.id}" price="${cartItemVo.product.price}">
 								¥ ${cartItemVo.product.price}
 							</span>
 						</li>
 						<li class="num_select">
-							<input class="car_ul_btn1" type="button" value="-" />
-							<input class="car_ul_text" type="text" placeholder="1" value="${cartItemVo.amount}"/>
-							<input class="car_ul_btn2" type="button" value="+" />
+							<input class="car_ul_btn1" type="button" value="-" onclick="addOrSub(${cartItemVo.product.id}, '-')"/>
+							<input class="car_ul_text" type="text" id="num${cartItemVo.product.id}" placeholder="1" value="${cartItemVo.amount}"/>
+							<input class="car_ul_btn2" type="button" value="+" onclick="addOrSub(${cartItemVo.product.id}, '+')"/>
 						</li>
 						<li class="money">
-							<span style="color: #F41443;">
-								¥ 1499.00
+							<span style="color: #F41443;" id="totalPrice${cartItemVo.product.id}">
+								${cartItemVo.product.price*cartItemVo.amount}
 							</span>
 						</li>
 						<li class="delete">
@@ -345,6 +345,35 @@
 		layui.use(['layer'], function(){
 		  var layer = layui.layer;
 		});
+		
+		function addOrSub(productId, operator){
+			var delta;
+			if(operator=='+') {
+				delta = 1;
+			} else {
+				delta = -1;
+			}
+			var num = $('#num'+productId).val();
+			$.ajax({
+				url : '${ctx}/cart/updateCart.shtml',
+				data : {'productId' : productId, 'amount' : delta},
+				type : 'POST',
+				dataType : 'json',
+				success : function(jsonObj) {
+					if(jsonObj.code == util.SUCCESS) {
+						num = parseInt(num) + delta;
+						$('#num'+productId).val(num);
+						//updateTotalPrice
+						var price = $('#price'+productId).attr('price');
+						var totalPrice = num * price;
+						$('#totalPrice'+productId).html(totalPrice);
+					} else {
+						mylayer.errorMsg(jsonObj.msg);
+					}
+				}
+			});
+		}
+		
 	</script>
 
 </html>
