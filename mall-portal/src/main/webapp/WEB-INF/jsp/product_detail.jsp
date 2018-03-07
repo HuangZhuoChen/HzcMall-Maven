@@ -8,6 +8,7 @@
 		<meta charset="UTF-8">
 		<title>华为畅享6S</title>
 		<link rel="stylesheet" type="text/css" href="${ctx}/static/front/css/detail_style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctx}/static/front/css/detail_style.css" />
 	</head>
 
 	<body>
@@ -921,8 +922,27 @@
 		</div>
 	</body>
 	<script type="text/javascript">
+		layui.use(['layer'], function(){
+		  var layer = layui.layer;
+		  
+		  layer.msg('Hello World');
+		});
+		
 		function addCart() {
-			window.location.href="${ctx}/cart/getCartPage.shtml?productId=${product.id}&amount="+$("#amount").val();
+			$.ajax({
+				url : '${ctx}/cart/addCart.shtml',
+				data : {'productId' : '${product.id}', 'amount' : $("#amount").val()},
+				type : 'POST',
+				dataType : 'json',
+				success : function(jsonObj) {
+					if(jsonObj.code == util.SUCCESS) {
+						layer.msg('dyhfidhfio');
+						mylayer.successUrl(jsonObj.msg, '${ctx}/cart/getCartPage.shtml');
+					} else {
+						mylayer.errorMsg(jsonObj.msg);
+					}
+				}
+			});
 		}
 		
 	</script>
