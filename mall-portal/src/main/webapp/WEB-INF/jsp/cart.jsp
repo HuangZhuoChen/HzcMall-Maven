@@ -376,6 +376,7 @@
 						var price = $('#price'+productId).attr('price');
 						var totalPrice = num * price;
 						$('#cartItemTotalPrice'+productId).html(totalPrice);
+						refreshTotalPrice();
 					} else {
 						mylayer.errorMsg(jsonObj.msg);
 					}
