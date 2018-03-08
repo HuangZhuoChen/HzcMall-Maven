@@ -373,7 +373,6 @@
 					if(jsonObj.code == util.SUCCESS) {
 						num = parseInt(num) + delta;
 						$('#num'+productId).val(num);
-						//updateTotalPrice
 						var price = $('#price'+productId).attr('price');
 						var totalPrice = num * price;
 						$('#cartItemTotalPrice'+productId).html(totalPrice);
@@ -384,6 +383,7 @@
 			});
 		}
 		
+		//选择或取消选择某件商品，点击checkbox
 		function selectProductStatus(productId) {
 			var isChecked = $('#checkbox'+productId).prop('checked');
 			$.ajax({
@@ -401,6 +401,7 @@
 			});
 		}
 		
+		//重新计算购物车选中商品的总价格
 		function refreshTotalPrice() {
 			var checkboxs = $('input[name=selectCheckbox]:checked');
 			var totalPrice = 0.00;

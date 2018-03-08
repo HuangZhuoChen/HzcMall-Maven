@@ -40,10 +40,12 @@ public class CartController {
 
 	@RequestMapping("/getCartPage")
 	public String getCartPage(HttpServletRequest request, Model model) {
+		// 将cookie里面所有的商品转换成CartVo这个对象
 		CartVo cartVo = getCartVoFromCookie(request);
-		// 2、将cookie里面所有的商品查询出来，转换成Cart这个对象
 		if (cartVo != null) {
 			List<CartItemVo> cartItemVos = cartVo.getCartItemVos();
+			//从Cookie里面转换成的CartVo对象里面的product对象只有id属性，
+			//所以要将其他属性填充上
 			for (CartItemVo item : cartItemVos) {
 				Product product = productService.selectById(item.getProduct().getId());
 				item.setProduct(product);
@@ -71,6 +73,7 @@ public class CartController {
 			return ServerResponse.createError("添加购物车失败");
 		}
 		
+		//将CartVo对象设置到Cookie中
 		setCartVoToCookie(response, cartVo);
 		return ServerResponse.createSuccess("添加购物车成功");
 	}
@@ -81,7 +84,6 @@ public class CartController {
 			HttpServletResponse response) {
 		// 讲Cookie里面的购物车转换为CartVo对象
 		CartVo cartVo = getCartVoFromCookie(request);
-		// 原来cookie中没有购物车，所以转换为的CartVo是null。
 		if (cartVo == null) {
 			return ServerResponse.createError("获取购物车失败");
 		}
@@ -96,6 +98,7 @@ public class CartController {
 			}
 		}
 
+		//将CartVo对象设置到Cookie中
 		setCartVoToCookie(response, cartVo);
 		return ServerResponse.createSuccess("删除购物车成功");
 	}
@@ -103,8 +106,6 @@ public class CartController {
 	private boolean addOrUpdateCarVo(Integer productId, Integer amount, Boolean isChecked, CartVo cartVo) {
 		Product productTemp = productService.selectById(productId);
 		boolean isExist = false;
-		// 1、将要加入购物车的商品productId和amount插入cookie
-		// 1.2 这个商品cookie里面没有，创建然后插入
 		List<CartItemVo> cartItemVos = cartVo.getCartItemVos();
 		for (CartItemVo item : cartItemVos) {
 			// 1.1 这个商品cookie里面已经有了，根据productId找到这件商品，更新数量即可
@@ -120,6 +121,7 @@ public class CartController {
 					} 
 					item.setAmount(newAmount);
 				}
+				//跟新是否选中状态
 				if (isChecked != null) {
 					if (isChecked) {
 						item.setIsChecked(Const.CartChecked.CHECKED);
