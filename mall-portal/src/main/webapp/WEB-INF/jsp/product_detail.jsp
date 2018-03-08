@@ -930,8 +930,8 @@
 		function addCart() {
 			//window.location.href="${ctx}/cart/addCart.shtml?productId=${product.id}&amount="+$("#amount").val();
 			$.ajax({
-				url : '${ctx}/cart/addCart.shtml',
-				data : {'productId' : '${product.id}', 'amount' : $("#amount").val()},
+				url : '${ctx}/cart/addOrUpdateCart.shtml',
+				data : {'productId' : '${product.id}', 'amount' : $("#amount").val(), 'isChecked' : true},
 				type : 'POST',
 				dataType : 'json',
 				success : function(jsonObj) {
