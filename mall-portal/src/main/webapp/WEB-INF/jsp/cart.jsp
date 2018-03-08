@@ -365,7 +365,7 @@
 			}
 			var num = $('#num'+productId).val();
 			$.ajax({
-				url : '${ctx}/cart/updateCart.shtml',
+				url : '${ctx}/cart/addOrUpdateCart.shtml',
 				data : {'productId' : productId, 'amount' : delta},
 				type : 'POST',
 				dataType : 'json',
@@ -387,7 +387,7 @@
 		function selectProductStatus(productId) {
 			var isChecked = $('#checkbox'+productId).prop('checked');
 			$.ajax({
-				url : '${ctx}/cart/updateCart.shtml',
+				url : '${ctx}/cart/addOrUpdateCart.shtml',
 				data : {'productId' : productId, 'isChecked' : isChecked},
 				type : 'POST',
 				dataType : 'json',
