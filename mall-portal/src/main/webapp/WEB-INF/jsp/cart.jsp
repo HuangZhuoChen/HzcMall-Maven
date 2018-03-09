@@ -8,6 +8,7 @@
 		<meta charset="UTF-8">
 		<title>靓淘网_购物车</title>
 		<link rel="stylesheet" type="text/css" href="${ctx}/static/front/css/cart_style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctx}/static/front/css/login_style.css" />
 	</head>
 
 	<body>
@@ -164,7 +165,7 @@
 					</li>
 					<li style="margin-left: 8px;margin-right: 265px;">全选</li>
 					<li style="margin-left: 265px;margin-right: 18px;">总金额（已免运费）：<span id="totalPrice" style="color: #F41443;">¥0</span></li>
-					<li class="total_right"><a href="">立即结算</a></li>
+					<li class="total_right"><a onclick="toAddOrder()">立即结算</a></li>
 				</ul>
 			</div>
 					<div class="sp">
@@ -346,6 +347,37 @@
 			京公网安备 110101020011226|京ICP证111033号|食品流通许可证 SP1101051110165515（1-1）|营业执照
 		</div>
 	</body>
+	<!-- login弹出层 -->
+	<div class="login" style="display:none" id="loginForm">
+		<form id="login-form">
+			<ul>
+				<li class="login_title_1">
+					<a href="">密码登录</a>
+
+				</li>
+				<li class="login_title_2">
+					<a href="">扫码登录</a>
+				</li>
+				<li>
+					<input id="username" name="username" class="login_user" type="text" placeholder="会员名/邮箱/手机号" />
+					<input id="password" name="password" class="login_password" type="password" placeholder="密码" />
+					<input class="login_btn" type="button" onclick="login()" value="登录" />
+				</li>
+				<li class="login_select">
+					<a class="weibo" href="">微博登录</a>
+					<a class="zhifubao" href="">支付宝登录</a><br />
+				</li>
+				<li class="renmenber_user">
+					<input type="checkbox" value="remer_user" id="remer_user" />
+					<label for="remer_user">记住用户名</label>
+				</li>
+				<li class="login_bottom">
+					<a href="">忘记密码</a>
+					<a href="">免费注册</a>
+				</li>
+			</ul>
+		</form>
+	</div>
 	<script type="text/javascript">
 		layui.use(['layer'], function(){
 		  var layer = layui.layer;
@@ -436,6 +468,75 @@
 				});
 			});
 		}
+		
+		//跳转到结算页面
+		function toAddOrder() {
+			//todo:用户没有勾选任何商品checkbox，给用户一个提示：您还没有选择任何商品
+			var user = '${CURRENT_USER}';
+			if(user == '') {
+				layer.open({
+					type : 1,
+					title : '登录',
+					offset : '50px',
+					area : ['350px','350px'],
+					content : $('#loginForm')
+				});
+			} else {
+				window.location.href = '${ctx}/order/getOrderPage.shtml';
+			}
+		}
+		
+		function login() {
+    		/*
+    		1、验证用户名
+    		1.1、验证用户名是否为空
+    		1.2、是否合法：4-8数字或字母
+    		2、密码不能为空
+    		3、ajax提交用户名和密码，并且接受后台返回的json数据
+    		*/
+    		var username = $("#username").val();
+    		var password = $("#password").val();
+    		//1.1、验证用户名是否为空
+    		if(util.isNull(username)) {
+    			mylayer.errorMsg("用户名不能为空");
+    			return;
+    		}
+    		
+    		//1.2、是否合法：4-8数字或字母
+    		if(!isUsernameValid(username)) {
+    			mylayer.errorMsg("用户名不合法，4-8数字或字母");
+    			return;
+    		}
+    		
+    		//2、密码不能为空
+    		if(util.isNull(password)) {
+    			mylayer.errorMsg("密码不能为空");
+    			return;
+    		}
+    		
+    		//3、ajax提交用户名和密码，并且接受后台返回的json数据
+    		$.ajax({
+    			url : "${ctx}/user/login.shtml",
+    			type : "POST",
+    			dataType : "json",
+    			data : $("#login-form").serialize(),
+    			success : function(data) {
+    				if(data.code == util.SUCCESS) {
+    					mylayer.success(data.msg);
+    					//mylayer.successUrl(data.msg, "${ctx}/index.action");
+    					window.location.href = '${ctx}/order/getOrderPage.shtml';
+    				} else {
+    					mylayer.errorMsg(data.msg);
+    				}
+    			}
+    		});
+    	}
+    	
+    	/*是否合法：4-8数字或字母*/
+    	function isUsernameValid(value) {
+    		var pattern = /^[0-9a-zA-Z]{4,8}$/;
+    		return pattern.test(value);
+    	} 
 	</script>
 
 </html>
