@@ -144,4 +144,11 @@
     where parent_id!=0
   </select>
   
+  <select id="getCategoryCountAnalysis" resultType="com.situ.mall.core.vo.CategoryCountVo">
+  	SELECT c.name as name,COUNT(*) as count
+	FROM product AS p INNER JOIN category AS c
+	ON p.category_id = c.id
+	GROUP BY p.category_id;
+  </select>
+  
 </mapper>

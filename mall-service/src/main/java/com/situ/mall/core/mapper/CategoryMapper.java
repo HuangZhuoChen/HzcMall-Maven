@@ -3,6 +3,7 @@ package com.situ.mall.core.mapper;
 import java.util.List;
 
 import com.situ.mall.core.entity.Category;
+import com.situ.mall.core.vo.CategoryCountVo;
 
 public interface CategoryMapper {
     int deleteByPrimaryKey(Integer id);
@@ -24,4 +25,6 @@ public interface CategoryMapper {
 	Integer selectParentCategoryId(Integer categoryId);
 
 	List<Category> selectSecondCategoryList();
+
+	List<CategoryCountVo> getCategoryCountAnalysis();
 }

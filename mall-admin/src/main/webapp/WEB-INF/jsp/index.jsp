@@ -69,7 +69,7 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a class="J_menuItem" href="graph_echarts.html">百度ECharts</a>
+                                <a class="J_menuItem" href="${ctx}/category/getCategoryCountAnalysisPage.action">分类统计</a>
                             </li>
                             <li>
                                 <a class="J_menuItem" href="graph_flot.html">Flot</a>

@@ -9,6 +9,7 @@ import com.situ.mall.common.response.ServerResponse;
 import com.situ.mall.core.entity.Category;
 import com.situ.mall.core.mapper.CategoryMapper;
 import com.situ.mall.core.service.ICategoryService;
+import com.situ.mall.core.vo.CategoryCountVo;
 @Service
 public class CategoryServiceImpl implements ICategoryService{
 	@Autowired
@@ -47,6 +48,16 @@ public class CategoryServiceImpl implements ICategoryService{
 	@Override
 	public List<Category> selectSecondCategoryList() {
 		return categoryMapper.selectSecondCategoryList();
+	}
+
+	@Override
+	public ServerResponse getCategoryCountAnalysis() {
+		List<CategoryCountVo> list = categoryMapper.getCategoryCountAnalysis();
+		if (list == null || list.size() == 0) {
+			return ServerResponse.createError("查找失败或数据为空");
+		}
+		
+		return ServerResponse.createSuccess("查找成功", list);
 	}
 		
 }

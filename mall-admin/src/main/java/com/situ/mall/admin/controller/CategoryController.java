@@ -25,4 +25,15 @@ public class CategoryController {
 	public ServerResponse selectSecondCategory(Integer topCategoryId) {
 		return categoryService.selectSecondCategory(topCategoryId);
 	}
+	
+	@RequestMapping("/getCategoryCountAnalysisPage")
+	public String getCategoryCountAnalysisPage() {
+		return "category_count_analysis";
+	}
+	
+	@RequestMapping("/getCategoryCountAnalysis")
+	@ResponseBody
+	public ServerResponse getCategoryCountAnalysis() {
+		return categoryService.getCategoryCountAnalysis();
+	}
 }

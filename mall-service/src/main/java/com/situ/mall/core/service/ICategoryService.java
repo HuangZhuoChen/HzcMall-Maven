@@ -17,4 +17,6 @@ public interface ICategoryService {
 
 	List<Category> selectSecondCategoryList();
 
+	ServerResponse getCategoryCountAnalysis();
+
 }
