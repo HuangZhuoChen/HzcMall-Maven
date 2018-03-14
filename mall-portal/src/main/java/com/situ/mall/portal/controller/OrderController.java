@@ -1,5 +1,6 @@
 package com.situ.mall.portal.controller;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.situ.mall.common.response.ServerResponse;
+import com.situ.mall.core.constant.Const;
 import com.situ.mall.core.entity.Order;
 import com.situ.mall.core.entity.OrderItem;
 import com.situ.mall.core.entity.Product;
@@ -43,10 +45,17 @@ public class OrderController {
 		CartVo cartVo = getCartVoFromCookie(request);
 		//将CartItemVo里面的Product填满信息，因为现在只有一个id
 		List<CartItemVo> cartItemVos = cartVo.getCartItemVos();
-		for (CartItemVo cartItemVo : cartItemVos) {
-			Product product = productService.selectById(cartItemVo.getProduct().getId());
-			cartItemVo.setProduct(product);
+		Iterator<CartItemVo> iterator = cartItemVos.iterator();
+		while (iterator.hasNext()) {
+			CartItemVo item = iterator.next();
+			if (item.getIsChecked() == Const.CartChecked.UNCHECKED) {
+				iterator.remove();
+			} else {
+				Product product = productService.selectById(cartItemVo.getProduct().getId());
+				cartItemVo.setProduct(product);
+			}
 		}
+		//cartVo.setCartItemVos(cartItemVos);
 		model.addAttribute("cartVo", cartVo);
 		return "order";
 	}
@@ -66,18 +75,28 @@ public class OrderController {
 		//3.从Cookie里面得到购物车CartVo
 		CartVo cartVo = getCartVoFromCookie(request);
 		List<CartItemVo> cartItemVos = cartVo.getCartItemVos();
-		for (CartItemVo cartItemVo : cartItemVos) {
-			OrderItem orderItem = new OrderItem();
-			orderItem.setOrderNo(order.getOrderNo());
-			orderItem.setUserId(user.getId());
-			Product product = productService.selectById(cartItemVo.getProduct().getId());
-			orderItem.setProductId(cartItemVo.getId());
-			orderItem.setCurrentUnitPrice(product.getPrice());
-			orderItem.setProductName(product.getName());
-			orderService.addOrderItem(orderItem);
+		for (CartItemVo item : cartItemVos) {
+			//购物车里面被选中的才加入数据库
+			if (item.getIsChecked() == Const.CartChecked.CHECKED) {
+				OrderItem orderItem = new OrderItem();
+				orderItem.setOrderNo(order.getOrderNo());
+				orderItem.setUserId(user.getId());
+				Product product = productService.selectById(cartItemVo.getProduct().getId());
+				orderItem.setProductId(cartItemVo.getId());
+				orderItem.setCurrentUnitPrice(product.getPrice());
+				orderItem.setProductName(product.getName());
+				orderService.addOrderItem(orderItem);
+			}
 		}
 		
 		//4.遍历cartVo将所有isChecked是1的删除，然后再写到cookie
+		Iterator<CartItemVo> iterator = cartItemVos.iterator();
+		while (iterator.hasNext()) {
+			CartItemVo item = iterator.next();
+			if (item.getIsChecked() == Const.CartChecked.CHECKED) {
+				iterator.remove();
+			}
+		}
 		
 		return ServerResponse;
 	}
