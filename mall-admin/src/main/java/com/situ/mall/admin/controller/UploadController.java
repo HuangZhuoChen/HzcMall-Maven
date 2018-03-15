@@ -14,7 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.qiniu.common.QiniuException;
+import com.qiniu.common.Zone;
+import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.util.Auth;
 import com.situ.mall.common.util.JsonUtils;
+import com.situ.mall.common.util.QiniuUtil;
 
 @Controller
 @RequestMapping("/upload")
@@ -23,11 +32,26 @@ public class UploadController {
 	@RequestMapping(value = "/uploadPic", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> uploadPic(MultipartFile pictureFile) {
-		//为了防止文件重名（重名文件会覆盖丢失）,所以生成一个不重复的随机的名字dcf38fd6925c44528d6c402d02c04d7b
+		// String fileName = uploadByLocal(pictureFile);
+		String fileName = "";
+		try {
+			fileName = QiniuUtil.uploadImage(pictureFile.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("fileName", fileName);
+		map.put("url", QiniuUtil.getUrl(fileName));
+		return map;
+	}
+
+	private String uploadByLocal(MultipartFile pictureFile) {
+		// 为了防止文件重名（重名文件会覆盖丢失）,所以生成一个不重复的随机的名字dcf38fd6925c44528d6c402d02c04d7b
 		String name = UUID.randomUUID().toString().replace("-", "");
-		//jpg、png
+		// jpg、png
 		String ext = FilenameUtils.getExtension(pictureFile.getOriginalFilename());
-		String fileName = name + "." + ext;//dcf38fd6925c44528d6c402d02c04d7b.png
+		String fileName = name + "." + ext;// dcf38fd6925c44528d6c402d02c04d7b.png
 		String filePath = "D:\\pic\\" + fileName;
 		try {
 			pictureFile.transferTo(new File(filePath));
@@ -36,33 +60,16 @@ public class UploadController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String url = "/pic/" + fileName;
-
-		Map<String, Object> map = new HashMap<>();
-		map.put("fileName", fileName);
-		map.put("url", url);
-		return map;
+		return fileName;
 	}
 
-	@RequestMapping(value="/multiPicUpload", produces=MediaType.TEXT_PLAIN_VALUE+";charset=utf-8")
+	@RequestMapping(value = "/multiPicUpload", produces = MediaType.TEXT_PLAIN_VALUE + ";charset=utf-8")
 	@ResponseBody
 	public String multiPicUpload(MultipartFile pictureFile) {
 		System.out.println("UploadManagerController.multiPicUpload()");
 		try {
-			//为了防止文件重名（重名文件会覆盖丢失）,所以生成一个不重复的随机的名字dcf38fd6925c44528d6c402d02c04d7b
-			String name = UUID.randomUUID().toString().replace("-", "");
-			//jpg、png
-			String ext = FilenameUtils.getExtension(pictureFile.getOriginalFilename());
-			String fileName = name + "." + ext;//dcf38fd6925c44528d6c402d02c04d7b.png
-			String filePath = "D:\\pic\\" + fileName;
-			try {
-				pictureFile.transferTo(new File(filePath));
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
+			String fileName = uploadByLocal(pictureFile);
+
 			String url = "/pic/" + fileName;
 
 			Map<String, Object> map = new HashMap<>();

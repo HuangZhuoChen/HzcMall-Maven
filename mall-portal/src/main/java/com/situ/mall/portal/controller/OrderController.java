@@ -24,7 +24,7 @@ import com.situ.mall.portal.vo.CartVo;
 
 @Controller
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController {/*
 	@Autowired
 	private IShippingService shippingService;
 	
@@ -100,4 +100,4 @@ public class OrderController {
 		
 		return ServerResponse;
 	}
-}
+*/}
