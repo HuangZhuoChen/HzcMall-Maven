@@ -47,10 +47,10 @@ http://www.springframework.org/schema/util/spring-util-4.1.xsd">
     </bean>
     
     <!-- 一定要放在viewResolver的前面，这样就先去找freemarker的 -->
-    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+    <!-- <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/WEB-INF/ftl/" />
         <property name="defaultEncoding" value="UTF-8" />
-    </bean>
+    </bean> -->
     
     <!-- ********************************************************************** -->
     <!-- 事务相关 -->

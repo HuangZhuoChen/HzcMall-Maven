@@ -8,11 +8,15 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
+    <welcome-file>index.action</welcome-file>
   </welcome-file-list>
   
   <!-- 配置监听器加载spring -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.situ.mall.core.listener.MyServletContextListener</listener-class>
     </listener>
   
   

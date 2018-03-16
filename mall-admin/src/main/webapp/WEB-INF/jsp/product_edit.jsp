@@ -76,7 +76,7 @@
 				<label class="layui-form-label">商品主图</label>
 				<div class="layui-input-block">
 					<input type="hidden" id="mainImage" name="mainImage" value="${product.mainImage}"/>
-					<img alt="" src="/pic/${product.mainImage}" id="imgId" width="100" height="100"/><br/>
+					<img alt="" src="${imageServer}/${product.mainImage}" id="imgId" width="100" height="100"/><br/>
 					<input type="file" id="inputFile" name="pictureFile" onchange="uploadPic()"/>
 				</div>
 			</div>
@@ -88,7 +88,7 @@
 					<div id="subImagesDiv">
 						<c:set var="subImages" value="${fn:split(product.subImages, ',')}" />
 						<c:forEach items="${subImages}" var="subImage">
-							<img src="/pic/${subImage}" width="80" height="50">
+							<img src="${imageServer}/${subImage}" width="80" height="50">
 						</c:forEach>
 					</div>
 				</div>

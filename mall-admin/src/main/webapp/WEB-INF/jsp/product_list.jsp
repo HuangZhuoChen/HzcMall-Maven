@@ -31,7 +31,7 @@
 	</script>
 	
 	<script type="text/html" id="imgTpl">
-  		<img src="/pic/{{d.mainImage}}">
+  		<img src="${imageServer}/{{d.mainImage}}">
 	</script>
 	
 	<script type="text/html" id="statusTpl">

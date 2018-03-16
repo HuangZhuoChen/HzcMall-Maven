@@ -22,8 +22,11 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.situ.mall.common.util.ImageServerUtil;
 import com.situ.mall.common.util.JsonUtils;
+import com.situ.mall.common.util.PropertiesUtil;
 import com.situ.mall.common.util.QiniuUtil;
+import com.situ.mall.common.util.ImageServerUtil.EnumImageServer;
 
 @Controller
 @RequestMapping("/upload")
@@ -31,19 +34,35 @@ public class UploadController {
 
 	@RequestMapping(value = "/uploadPic", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> uploadPic(MultipartFile pictureFile) {
-		// String fileName = uploadByLocal(pictureFile);
-		String fileName = "";
-		try {
-			fileName = QiniuUtil.uploadImage(pictureFile.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Map<String, Object> uploadPic(MultipartFile pictureFile) throws IOException {
+		String fileName = upload(pictureFile);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("fileName", fileName);
-		map.put("url", QiniuUtil.getUrl(fileName));
+		map.put("url", getUrl(fileName));
 		return map;
+	}
+
+	/*
+	 * url=服务器+fileName
+	 */
+	private Object getUrl(String fileName) {
+		if (ImageServerUtil.getImageServer() == EnumImageServer.QINIU) {
+			return QiniuUtil.getUrl(fileName);
+		} else {
+			return ImageServerUtil.getLocalUrl(fileName);
+		}
+	}
+
+	/*
+	 * 返回上传的图片的名字
+	 */
+	private String upload(MultipartFile multipartFile) throws IOException {
+		if (ImageServerUtil.getImageServer() == EnumImageServer.QINIU) {
+			return QiniuUtil.uploadImage(multipartFile.getBytes());
+		} else {
+			return uploadByLocal(multipartFile);
+		}
 	}
 
 	private String uploadByLocal(MultipartFile pictureFile) {

@@ -144,7 +144,7 @@
 							<c:set var="subImages" value="${fn:split(product.subImages, ',')}" />
 							<c:forEach items="${subImages}" var="subImage">
 								<li class="small_shop" width="57" height="58">
-									<img src="/pic/${subImage}" >
+									<img src="${imageServer}/${subImage}" >
 								</li>
 							</c:forEach>
 							
