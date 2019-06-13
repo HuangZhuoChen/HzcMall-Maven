@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.dao.support.DaoSupport;
 
-import com.situ.mall.core.entity.User;
+import com.mavenTest.mall.core.entity.User;
 
 /*//帮助我们创建IOC容器
 @RunWith(SpringJUnit4ClassRunner.class)
