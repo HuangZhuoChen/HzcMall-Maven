@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.situ.mall.core.mapper.OrderMapper" >
-  <resultMap id="BaseResultMap" type="com.situ.mall.core.entity.Order" >
+<mapper namespace="com.mavenTest.mall.core.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.mavenTest.mall.core.entity.Order" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="order_no" jdbcType="BIGINT" javaType="java.lang.Long" />
@@ -33,7 +33,7 @@
     delete from order
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.situ.mall.core.entity.Order" >
+  <insert id="insert" parameterType="com.mavenTest.mall.core.entity.Order" >
     insert into order (id, order_no, user_id, 
       shipping_id, payment, payment_type, 
       postage, status, payment_time, 
@@ -45,7 +45,7 @@
       #{sendTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.situ.mall.core.entity.Order" >
+  <insert id="insertSelective" parameterType="com.mavenTest.mall.core.entity.Order" >
     insert into order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -136,7 +136,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.situ.mall.core.entity.Order" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.mavenTest.mall.core.entity.Order" >
     update order
     <set >
       <if test="orderNo != null" >
@@ -181,7 +181,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.situ.mall.core.entity.Order" >
+  <update id="updateByPrimaryKey" parameterType="com.mavenTest.mall.core.entity.Order" >
     update order
     set order_no = #{orderNo,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=INTEGER},

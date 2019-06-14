@@ -1,4 +1,4 @@
-package com.situ.mall.core.mapper;
+package com.mavenTest.mall.core.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

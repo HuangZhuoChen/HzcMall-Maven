@@ -4,8 +4,8 @@
 <configuration>
     <!-- 别名 -->
     <typeAliases>
-       <package name="com.situ.mall.core.entity"/>
-       <package name="com.situ.mall.admin.vo"/>
+       <package name="com.mavenTest.mall.core.entity"/>
+       <package name="com.mavenTest.mall.admin.vo"/>
     </typeAliases>
     
     <plugins>

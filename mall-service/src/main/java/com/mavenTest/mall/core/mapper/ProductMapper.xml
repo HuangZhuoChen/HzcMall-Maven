@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.situ.mall.core.mapper.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.situ.mall.core.entity.Product" >
+<mapper namespace="com.mavenTest.mall.core.mapper.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.mavenTest.mall.core.entity.Product" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -31,7 +31,7 @@
     delete from product
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.situ.mall.core.entity.Product" >
+  <insert id="insert" parameterType="com.mavenTest.mall.core.entity.Product" >
     insert into product (id, category_id, name, 
       subtitle, main_image, sub_images, 
       detail, price, stock, 
@@ -43,7 +43,7 @@
       #{status,jdbcType=INTEGER}, now(), now()
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.situ.mall.core.entity.Product" >
+  <insert id="insertSelective" parameterType="com.mavenTest.mall.core.entity.Product" >
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -122,7 +122,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.situ.mall.core.entity.Product" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.mavenTest.mall.core.entity.Product" >
     update product
     <set >
       <if test="categoryId != null" >
@@ -159,7 +159,7 @@
     ,update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.situ.mall.core.entity.Product" >
+  <update id="updateByPrimaryKey" parameterType="com.mavenTest.mall.core.entity.Product" >
     update product
     set category_id = #{categoryId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
