@@ -24,7 +24,7 @@
 		<!-- 连接池 -->
 		<c3p0-version>0.9.1.2</c3p0-version>
 		<!-- Jackson Json处理工具包 -->
-		<jackson.version>2.4.2</jackson.version>
+		<jackson.version>2.12.7.1</jackson.version>
 		<jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
 		<!-- 单元测试 -->
 		<junit.version>4.12</junit.version>
